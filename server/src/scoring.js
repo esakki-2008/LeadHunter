@@ -7,10 +7,15 @@ export function scoreLead(lead) {
     if (lead.websiteStatus !== 'ok') { score += 18; reasons.push('Website is unreachable or unhealthy'); }
     if (lead.websiteStatus === 'ok' && !lead.mobileFriendlySignal) { score += 8; reasons.push('Mobile optimization could not be confirmed'); }
     if (lead.websiteStatus === 'ok' && lead.pageLoadMs > 3000) { score += 8; reasons.push('Slow initial response'); }
+    if (lead.websiteStatus === 'ok' && lead.seoScore < 60) { score += 8; reasons.push('SEO fundamentals need improvement'); }
+    if (lead.websiteStatus === 'ok' && lead.h1Count === 0) { score += 4; reasons.push('Missing H1 heading'); }
+    if (lead.websiteStatus === 'ok' && lead.imagesMissingAlt > 0) { score += 3; reasons.push('Images need alt text'); }
+    if (lead.websiteStatus === 'ok' && !lead.hasContactLink) { score += 4; reasons.push('No obvious contact or booking path'); }
+    if (lead.websiteStatus === 'ok' && !lead.hasSocialLinks) { score += 2; reasons.push('Social links not detected'); }
   }
   if (!lead.email) { score += 8; reasons.push('No public email found'); }
   if (!lead.phone) { score += 5; reasons.push('No public phone found'); }
-  if (lead.category) { score += 4; }
+  if (lead.category) score += 4;
   return { score: Math.min(100, score), reasons };
 }
 
