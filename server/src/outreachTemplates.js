@@ -1,0 +1,12 @@
+function clean(value=''){return String(value||'').trim()}
+function service(lead){return clean(lead.recommendedService)||'a modern website and lead-capture experience'}
+export function buildOutreachTemplates(lead={}){
+ const name=clean(lead.name)||'your business';const location=clean(lead.location)||'the local area';const category=clean(lead.category)||'business';const website=lead.website?'your current website':'your online presence';const seo=Number(lead.seoScore||0);
+ const templates=[
+  {id:'friendly',label:'Friendly',channel:'email',subject:`Quick idea for ${name}`,message:`Hi ${lead.contactName?clean(lead.contactName):'there'},\n\nI came across ${name} while looking at ${category.toLowerCase()} businesses in ${location}. I noticed ${website}${lead.website?` has a few areas that could be improved${seo<60?`, including some SEO signals at ${seo}%`:''}`:' could be strengthened with a dedicated website'}.\n\nI build fast, mobile-friendly websites that help local businesses turn visitors into enquiries. For ${name}, I’d suggest ${service(lead)}.\n\nWould you be open to a quick 10-minute chat?\n\nBest,\nEsakki`},
+  {id:'audit',label:'Audit-led',channel:'email',subject:`A few website opportunities for ${name}`,message:`Hello ${lead.contactName?clean(lead.contactName):'there'},\n\nI reviewed the public web presence for ${name} and found a few practical opportunities around visibility, mobile experience and enquiry conversion.\n\nThe main idea I’d recommend is ${service(lead)}. I can turn the findings into a simple, fixed-scope website plan.\n\nIf useful, I can send the short audit and proposal.\n\nRegards,\nEsakki`},
+  {id:'whatsapp',label:'WhatsApp',channel:'whatsapp',subject:'',message:`Hi ${lead.contactName?clean(lead.contactName):'there'} 👋 I came across ${name} in ${location}. I help local ${category.toLowerCase()} businesses improve their online presence and get more enquiries. I noticed a few opportunities around ${website}. I can share a quick audit + simple proposal if you’re interested. — Esakki`},
+  {id:'followup',label:'Follow-up',channel:'email',subject:`Following up — ${name}`,message:`Hi ${lead.contactName?clean(lead.contactName):'there'},\n\nJust following up on my message about improving ${name}'s online presence. I can share a short audit and a practical proposal focused on ${service(lead)}.\n\nWould you like me to send it over?\n\nBest,\nEsakki`}
+ ];
+ return {generatedAt:new Date().toISOString(),business:name,templates}
+}
